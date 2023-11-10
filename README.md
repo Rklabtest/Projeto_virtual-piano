@@ -46,6 +46,6 @@ Ao criar um novo sintetizador, ele é armazenado na propriedade `synth` do objet
 
 Neste projeto, foram incluídos os sintetizadores `Synth`, `MonoSynth` e `FMSynth`, seguindo as recomendações da documentação do [Tone.js](https://tonejs.github.io/) [^1].
 
-O controle de volume é feito pelo `input` da chave _Volume_, que aciona a função `adjustVolume(event)` toda vez que o valor de entrada é alterado. O valor máximo fixado neste projeto é o valor "normal" da saída de áudio e a redução do som se dá pela diminuição de ganho (em dB) aplicado a `synth`. A redução máxima é estabelecida por meio da propriedade `volumeRange` do objeto `piano`.
+O controle de volume é feito pelo `input` da chave _Volume_, que aciona a função `adjustVolume()` toda vez que o valor de entrada é alterado. O valor máximo fixado neste projeto é o valor "normal" da saída de áudio e a redução do som se dá pela diminuição de ganho (em dB) aplicado a `synth`. A redução máxima é estabelecida por meio da propriedade `volumeRange` do objeto `piano`.
 
 [^1]: O framework Tone.js inclui o ScriptProcessorMode (interface obsoleta), porém apenas para verificação de recursos, não impactando no processamento de áudio, desta forma, as mensagens de aviso no console referentes a esta interface podem ser ignoradas.  
