@@ -2,7 +2,7 @@
 
 Este é um projeto de um piano virtual baseado no repositório do Desafio DIO Potência Tech, mas com introdução de novas features.
 
-Diferente do projeto original no qual são incorporados arquivos de som, no presente projeto o som das teclas são gerados por meio do framework de áudio _**Tone.js**_, cuja biblioteca permite trabalhar com uma vasta gama de efeitos e filtros pré-definidos.
+Diferente do projeto original no qual são incorporados arquivos de som, no presente projeto os sons das teclas são gerados por meio do framework de áudio _**Tone.js**_, cuja biblioteca permite trabalhar com uma vasta gama de efeitos e filtros pré-definidos.
 
 Link para visualização: [clique aqui](https://rklabtest.github.io/Projeto_virtual-piano/).
 
