@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./src/styles/reset.css">
+    <link rel="stylesheet" href="./src/styles/main.css">
+    <link rel="shortcut icon" href="./src/images/favicon.png" type="image/x-icon">
+    <title>Piano Simulator</title>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h2>Virtual Piano</h2>
+            <div class="column power">
+                <span>Standby--on</span>
+                <input type="checkbox">
+            </div>
+            <div class="column volume-slider">
+                <span>Volume</span>
+                <input type="range"
+                min="0"
+                max="1"
+                value="0.5" step="any">
+            </div>
+            <div class="column sound-selector">
+                <span>Seletor</span>
+                <div>
+                    <div class="options">
+                        <span>1</span>
+                        <span>2</span>
+                        <span>3</span>
+                    </div>
+                    <input type="range" 
+                    min="1"
+                    max="3"
+                    value="1" step="1">
+                </div>
+            </div>
+            <div class="column keys-check">
+                <span>Teclas</span>
+                <input type="checkbox" checked>
+            </div>
+        </header>
+        <ul class="piano-keys">
+            <li class="key white" data-key="65" data-note="C4"><span>C</span><span>a</span></li>
+            <li class="key black" data-key="81" data-note="C#4"><span>C#</span><span>q</span></li>
+            <li class="key white" data-key="83" data-note="D4"><span>D</span><span>s</span></li>
+            <li class="key black" data-key="87" data-note="D#4"><span>D#</span><span>w</span></li>
+            <li class="key white" data-key="68" data-note="E4"><span>E</span><span>d</span></li>
+            <li class="key white" data-key="70" data-note="F4"><span>F</span><span>f</span></li>
+            <li class="key black" data-key="69" data-note="F#4"><span>F#</span><span>e</span></li>
+            <li class="key white" data-key="71" data-note="G4"><span>G</span><span>g</span></li>
+            <li class="key black" data-key="82" data-note="G#4"><span>G#</span><span>r</span></li>
+            <li class="key white" data-key="72" data-note="A4"><span>A</span><span>h</span></li>
+            <li class="key black" data-key="84" data-note="A#4"><span>A#</span><span>t</span></li>
+            <li class="key white" data-key="74" data-note="B4"><span>B</span><span>j</span></li>
+            <li class="key white" data-key="75" data-note="C5"><span>C</span><span>k</span></li>
+            <li class="key black" data-key="89" data-note="C#5"><span>C#</span><span>y</span></li>
+            <li class="key white" data-key="76" data-note="D5"><span>D</span><span>l</span></li>
+            <li class="key black" data-key="85" data-note="D#5"><span>D#</span><span>u</span></li>
+            <li class="key white" data-key="186" data-note="E5"><span>E</span><span>ç</span></li>
+            <li class="key white" data-key="77" data-note="F5"><span>F</span><span>m</span></li>
+            <li class="key black" data-key="73" data-note="F#5"><span>F#</span><span>i</span></li>
+            <li class="key white" data-key="188" data-note="G5"><span>G</span><span>,</span></li>
+            <li class="key black" data-key="79" data-note="G#5"><span>G#</span><span>o</span></li>
+            <li class="key white" data-key="190" data-note="A5"><span>A</span><span>.</span></li>
+            <li class="key black" data-key="80" data-note="A#5"><span>A#</span><span>p</span></li>
+            <li class="key white" data-key="191" data-note="B5"><span>B</span><span>;</span></li>
+        </ul>
+    </div>
+    <script src="./scripts/Tone.js"></script>
+    <script src="./scripts/engine.js"></script>
+</body>
+</html>
