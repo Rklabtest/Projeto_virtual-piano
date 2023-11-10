@@ -34,7 +34,7 @@ Mapa das notas musicais para uso do teclado físico:
 
 ## Configurações gerais:
 
-O interruptor _Standby--on`_ foi inserido para habilitar a inicialização do contexto de áudio. Isto se fez necessário uma vez que os navegadores exigem que haja uma prévia interação do usuário para a execução de áudios. Além disto, a inserção deste permite liberar recursos, caso a aplicação esteja aberta mas não sendo utilizada.
+O interruptor _Standby--on_ foi inserido para habilitar a inicialização do contexto de áudio. Isto se fez necessário uma vez que os navegadores exigem que haja uma prévia interação do usuário para a execução de áudios. Além disto, a inserção deste permite liberar recursos, caso a aplicação esteja aberta mas não sendo utilizada.
 
 O array `allowedKeys` armazenado no objeto `piano` contém os nomes das teclas físicas utilizadas para acionamento das teclas do piano. A referência de cada uma é feita por meio dos atributos `data-keys` dos elementos `li` do index.html, e devem receber como valores os códigos das teclas físicas usadas. Deve-se notar que os elementos `<span>` que se aninham em cada um dos elementos `<li>` devem conter o nome da tecla a qual o `data-keys` se refere, estes serão exibidos quando o interruptor `Teclas` estiver acionado.
 
