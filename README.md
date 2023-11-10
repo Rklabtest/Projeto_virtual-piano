@@ -4,6 +4,8 @@ Este é um projeto de um piano virtual baseado no repositório do Desafio DIO Po
 
 Diferente do projeto original no qual são incorporados arquivos de som, no presente projeto o som das teclas são gerados por meio do framework de áudio _**Tone.js**_, cuja biblioteca permite trabalhar com uma vasta gama de efeitos e filtros pré-definidos.
 
+Link para visualização: [clique aqui](https://rklabtest.github.io/Projeto_virtual-piano/).
+
 ## Características do projeto
 * Interruptor Standby-on;
 * Controle de volume;
@@ -13,7 +15,6 @@ Diferente do projeto original no qual são incorporados arquivos de som, no pres
 * 24 teclas ativáveis por clique ou teclado. 
 
 Mapa das notas musicais para uso do teclado físico:
-
 
 |Nota |Tecla|   |Nota  |Tecla|
 | :-: | :-: |:-:| :-:  | :-: |
