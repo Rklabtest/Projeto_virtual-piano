@@ -48,7 +48,8 @@ const chooseTypeOfSound = () => ({
 
 const setSound = option => {
   piano.values.synth = chooseTypeOfSound()[option]
-  piano.values.synth.volume = -(piano.values.volumeRange/2)
+  piano.values.synth.volume = piano.views.volumeControl.value
+  adjustVolume()
 }
 
 const switchSound = async event => {
@@ -102,8 +103,8 @@ const stopHandleKeys = event => {
   }
 }
 
-const adjustVolume = event => {
-  const volume = (-piano.values.volumeRange + Number(event.target.value)*piano.values.volumeRange)
+const adjustVolume = () => {
+  const volume = (-piano.values.volumeRange + Number(piano.views.volumeControl.value))
   if(volume === -piano.values.volumeRange) {
     piano.values.synth.volume.value = -Infinity
   } else {
