@@ -11,6 +11,7 @@ body {
 .container {
     border-radius: 20px;
     padding: 35px 40px;
+    user-select: none;
     background-color: #000;
 }
 
