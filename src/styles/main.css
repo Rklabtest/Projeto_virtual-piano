@@ -11,7 +11,8 @@ body {
 .container {
     border-radius: 20px;
     padding: 35px 40px;
-    user-select: none;
+    user-select: none';
+    touch-action: manipulation;
     background-color: #000;
 }
 
