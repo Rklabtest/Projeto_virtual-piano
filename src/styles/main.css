@@ -1,97 +1,117 @@
+html {
+    font-size: 10px;
+}
+
 body {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    background-color: #e3f2fd;
     font-family: 'Poppins', sans-serif;
     color: #fff;
 }
 
+:root {
+    --white-key-width: 7.14%;
+    --black-key-width: 5%;
+}
+
 .container {
-    border-radius: 20px;
-    padding: 35px 40px;
-    user-select: none';
-    touch-action: manipulation;
+    width: 100vw;
+    height: 100vh;
+    min-width: 640px;
+    max-width: 920px;
+    min-height: 320px;
+    max-height: 400px;
+    margin: 0 auto;
+    padding: 0 35px 0 35px;
     background-color: #000;
+    position: relative;
+    display: grid;
+    grid-template-rows: 25% 75%;
+    align-items: center;
+    border-radius: 20px;
+    user-select: none;
+    -webkit-tap-highlight-color: rgba(0,0,0,0); /* Safari, Chrome e baseados em WebKit */
+    -webkit-tap-highlight-color: transparent; /* Versões mais antigas do iOS */
+    -moz-tap-highlight-color: rgba(0,0,0,0); /* Firefox */
+    -ms-touch-action: none; /* Internet Explorer / Edge */
+    touch-action: none; 
 }
 
 .container header {
+    width: 100%;
+    height: 90%;
+    background-color: #877154;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    color: #b2b2b2;
+    justify-content: space-evenly;
+    border-radius: 6px;
+    box-shadow: inset 1px 1px 7px #d2b38a;
+    color: #c7c7c7;
 }
 
 header h2 {
-    font-size: 1.6rem;
+    height: 65px;
+    padding-bottom: 1rem;
+    display: flex;
+    align-items: end;
+    font-size: 2rem;
 }
 
 header .column {
+    height: 65px;
     display: flex;
+    flex-direction: column;
     align-items: center;
+    justify-content: end;
 }
 
-header .column>span {
+header .column > span {
+    margin-bottom: 0.5rem;
     font-weight: 500;
-    font-size: 1.19rem;
-    margin-right: 15px;
+    font-size: 1.3rem;
 }
 
-.volume-slider input {
+header .volume-slider input, header .sound-selector input {
     accent-color: #fff;
 }
 
-.sound-selector {
-    position: relative;
+.sound-selector .options {
+    margin: 0 0.6rem 0.5rem 0.6rem;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.4rem;
 }
 
 .sound-selector input {
-    appearance: unset;
-    height: 30px;
     width: 90px;
-    border-radius: 30px;
+    height: 20px;
     background-color: #4b4b4b;
-}
-
-.sound-selector div {
-    text-align: center;
-    font-size: 1rem;
-}
-
-.sound-selector .options {
-    position: absolute;
-    width: 90px;
-    top: -25px;
-    display: flex;
-    justify-content: space-around;    
+    appearance: unset;
+    border-radius: 30px;
 }
 
 .sound-selector input::-webkit-slider-thumb{
     all:inherit ;
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
+    background-color: #fff;
     border: 0.3rem solid #4b4b4b;
     border-radius: 50%;
-    background: #fff;
 } 
 
-.power input, .keys-check input {
+header .power input, header .keys-check input {
     width: 60px;
-    height: 30px;
+    height: 20px;
     padding: 0;
-    box-sizing: border-box;
-    appearance: none;
-    border-radius: 30px;
     background-color: #4b4b4b;
-    cursor: pointer;
     position: relative;
+    appearance: none;
+    border-radius: 20px;
+    cursor: pointer;
 }
 
 .power input::before, .keys-check input::before {
     content: "";
-    width: 20px;
-    height: 20px;
+    width: 15px;
+    height: 15px;
     background-color: #8c8c8c;
     position: absolute;
     top: 50%;
@@ -102,56 +122,228 @@ header .column>span {
 }
 
 .power input:checked::before, .keys-check input:checked::before {
-    left: 2.1rem;
+    left: 4.2rem;
     background-color: #fff;
 }
 .piano-keys {
-    display: flex;
-    margin-top: 40px;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    padding-top: 1rem;
+    background-color: #000;
+    display: grid;
+    grid-template-columns: repeat(14, 1fr);
 }
 
 .piano-keys .key {
-    cursor: pointer;
-    user-select: none;
-    list-style: none;
     color: #a2a2a2;
-    position: relative;
     text-transform: uppercase;
+    cursor: pointer;
 }
 
 .piano-keys .white {
-    width: 70px;
-    height: 270px;
-    border-radius: 8px;
-    border: 1px solid #000;
     background: linear-gradient(#fff 96%, #eee 4%);
+    border: 1px solid #383838;
+    border-radius: 6px;
 }
 
-.piano-keys .black {
-    width: 44px;
-    height: 140px;
-    z-index: 2;
-    margin: 0 -22px 0 -22px;
-    border-radius: 0 0 5px 5px;
-    border: 1px solid #000;
+.piano-keys .key.black {
+    width: 5%;
+    height: 60%;
+    min-width: 30px;
+    max-width: 44px;
+    min-height: 125px;
+    margin-top: 1rem;
     background: linear-gradient(#333, #000);
+    position: absolute;
+    z-index: 2;
+    border-radius: 0 0 5px 5px;
 }
 
-.piano-keys span:nth-child(2) {
+.piano-keys .key.black:nth-child(2) { 
+    left: 4.6%;
+}
+
+.piano-keys .key.black:nth-child(4) {
+    left: 11.7%;
+}
+
+.piano-keys .key.black:nth-child(7) {
+    left: 26%;
+}
+
+.piano-keys .key.black:nth-child(9) {
+    left: 33.2%;
+}
+
+.piano-keys .key.black:nth-child(11) {
+    left: 40.3%;
+}
+
+.piano-keys .key.black:nth-child(14) {
+    left: 54.6%;
+}
+
+.piano-keys .key.black:nth-child(16) {
+    left: 61.7%;
+}
+
+.piano-keys .key.black:nth-child(19) {
+    left: 76%;
+}
+
+.piano-keys .key:nth-child(21) {
+    left: 83.2%;
+}
+
+.piano-keys .key:nth-child(23) {
+    left: 90.3%;
+}
+
+
+.piano-keys .key.black span:nth-child(1) {
+    position: absolute;
+    width: 100%;
+    top: -15px;
+    font-size: 1.2rem;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.piano-keys .key.black span:nth-child(2) {
     position: absolute;
     bottom: 20px;
     width: 100%;
     text-align: center;
-    font-size: 1.13rem;
+    font-size: 1.5rem;
 }
 
-.piano-keys span:nth-child(1) {
+.piano-keys .key.white span:nth-child(1) {
     position: absolute;
-    width: 100%;
-    top: -20px;
-    font-size: 0.8rem;
-    text-align: center;
-    color: rgba(255, 255, 255, 0.5);
+    top: -5px;
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.piano-keys .key.white span:nth-child(2) {
+    position: absolute;
+    bottom: 15px;
+    font-size: 1.5rem;
+}
+
+.piano-keys .key.white:nth-child(1) span:nth-child(1) {
+    left: 1.8%;
+}
+
+.piano-keys .key.white:nth-child(3) span:nth-child(1) {
+    left: 10.2%;
+}
+
+.piano-keys .key.white:nth-child(5) span:nth-child(1) {
+    left: 18.5%;
+}
+
+.piano-keys .key.white:nth-child(6) span:nth-child(1) {
+    left: 23.5%;
+}
+
+.piano-keys .key.white:nth-child(8) span:nth-child(1) {
+    left: 31.4%;
+}
+
+.piano-keys .key.white:nth-child(10) span:nth-child(1) {
+    left: 38.7%;
+}
+
+.piano-keys .key.white:nth-child(12) span:nth-child(1) {
+    left: 47%;
+}
+
+.piano-keys .key.white:nth-child(13) span:nth-child(1) {
+    left: 52%;
+}
+
+.piano-keys .key.white:nth-child(15) span:nth-child(1) {
+    left: 60%;
+}
+
+.piano-keys .key.white:nth-child(17) span:nth-child(1) {
+    left: 68.5%;
+}
+
+.piano-keys .key.white:nth-child(18) span:nth-child(1) {
+    left: 73.5%;
+}
+
+.piano-keys .key.white:nth-child(20) span:nth-child(1) {
+    left: 81.5%;
+}
+
+.piano-keys .key.white:nth-child(22) span:nth-child(1) {
+    left: 88.7%;
+}
+
+.piano-keys .key.white:nth-child(24) span:nth-child(1) {
+    left: 97%;
+}
+
+.piano-keys .key.white:nth-child(1) span:nth-child(2) {
+    left: 2.8%;
+}
+
+.piano-keys .key.white:nth-child(3) span:nth-child(2) {
+    left: 9.9%;
+}
+
+.piano-keys .key.white:nth-child(5) span:nth-child(2) {
+    left: 16.9%;
+}
+
+.piano-keys .key.white:nth-child(6) span:nth-child(2) {
+    left: 24.1%;
+}
+
+.piano-keys .key.white:nth-child(8) span:nth-child(2) {
+    left: 31.1%;
+}
+
+.piano-keys .key.white:nth-child(10) span:nth-child(2) {
+    left: 38.3%;
+}
+
+.piano-keys .key.white:nth-child(12) span:nth-child(2) {
+    left: 45.8%;
+}
+
+.piano-keys .key.white:nth-child(13) span:nth-child(2) {
+    left: 52.7%;
+}
+
+.piano-keys .key.white:nth-child(15) span:nth-child(2) {
+    left: 59.9%;
+}
+
+.piano-keys .key.white:nth-child(17) span:nth-child(2) {
+    left: 67%;
+}
+
+.piano-keys .key.white:nth-child(18) span:nth-child(2) {
+    left: 74.1%;
+}
+
+.piano-keys .key.white:nth-child(20) span:nth-child(2) {
+    left: 81.4%;
+    font-size: 3rem;
+}
+
+.piano-keys .key.white:nth-child(22) span:nth-child(2) {
+    left: 88.5%;
+    font-size: 3rem;
+}
+
+.piano-keys .key.white:nth-child(24) span:nth-child(2) {
+    left: 95.9%;
+    font-size: 2rem;
 }
 
 .piano-keys .white.active {
@@ -167,6 +359,3 @@ header .column>span {
 .piano-keys .key.hide span:nth-child(2) {
     display: none;
 }
-
-
-
