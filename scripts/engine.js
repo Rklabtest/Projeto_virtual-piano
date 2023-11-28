@@ -1,6 +1,7 @@
 const piano = {
   views: {
-    powerButton: document.querySelector('.power'),
+    container: document.querySelector('.container'),
+    powerButton: document.querySelector('.power input'),
     volumeControl: document.querySelector('.volume-slider input'),
     soundSelector: document.querySelector('.sound-selector input'),
     keysDisplayControl: document.querySelector('.keys-check'),
@@ -12,10 +13,9 @@ const piano = {
     audioContext: null,
     volumeRange: 40,
     isKeyPressed: false,
-    allowedKeys: ['a', 's', 'd', 'f', 'g', 'ç', 'l', 'k', 'j', 'h', 'q', 'w', 'e', 'r', 't', 'p', 'o', 'i', 'u', 'y', ';', '.', ',', 'm']
-  },
-  actions: {
-    interval: null
+    allowedKeys: ['a', 's', 'd', 'f', 'g', 'ç', 'l', 'k', 'j', 'h', 'q', 'w', 'e', 'r', 't', 'p', 'o', 'i', 'u', 'y', ';', '.', ',', 'm'],
+    notesPlayed: [],
+    previousKeyCalled: null
   }
 }
 
@@ -59,96 +59,179 @@ const switchSound = async event => {
   }
 }
 
-const activeNote = key => {
-  if (piano.values.isKeyPressed) {
-    piano.values.synth.triggerAttack(key.dataset.note)
-    key.classList.add('active')
-  }
-}
-
 const releaseNote = () => piano.values.synth.triggerRelease()
 
+const testTargetFormat = event => event.target ? event.target : event
+
+const activeNote = key => {
+  piano.values.synth.triggerAttack(key.dataset.note)
+  key.classList.add('active')
+  piano.values.previousKeyCalled = key
+}
+
 const stopNote = key => {
-  piano.values.isKeyPressed = false
-  clearInterval(piano.actions.interval)
   setTimeout(() => key.classList.remove('active'), 150)
   releaseNote()
 }
 
-const handleClick = event => {
-  if (event.target.dataset.note && piano.values.synth) {
-    piano.values.isKeyPressed = true
-    piano.actions.interval = setInterval(activeNote(event.target), 100)
+const processInputNote = (event, status) => {
+  const target = testTargetFormat(event)
+  
+  if(target.dataset.note && piano.values.synth) {
+    if(status === 'start' && piano.values.previousKeyCalled !== target) {
+      if(piano.values.previousKeyCalled) {
+        stopNote(piano.values.previousKeyCalled)
+      }
+        
+      activeNote(target)
+    } 
+
+    if(status === 'stop') {
+      stopNote(target)
+      piano.values.previousKeyCalled = null
+    }
   }
 }
 
-const stopHandleClick = event => {
-  if (event.target.dataset.note && piano.values.synth) {
-    stopNote(event.target)
+const handleClickDown = event => {
+  const currentKey = event.target
+  processInputNote(currentKey, 'start')
+  piano.values.notesPlayed.push(currentKey)
+}
+
+const handlePointerMoves = event => {
+  if(!piano.values.notesPlayed.length || !event) {
+    return
+  }
+
+  const currentKey = testTargetFormat(event)
+
+  if (!piano.values.notesPlayed.includes(currentKey) && currentKey.dataset.note) { 
+    processInputNote(piano.values.notesPlayed[piano.values.notesPlayed.length - 1], 'stop')
+    processInputNote(currentKey, 'start')
+    piano.values.notesPlayed.push(currentKey)
+
+  } else if (piano.values.notesPlayed[piano.values.notesPlayed.length - 2] === currentKey) {
+    processInputNote(piano.values.notesPlayed[piano.values.notesPlayed.length - 1], 'stop')
+    piano.values.notesPlayed.pop()
+    processInputNote(currentKey, 'start')
+  
+  } else if (!currentKey.dataset.note && piano.values.synth) {
+    processInputNote(piano.values.notesPlayed[piano.values.notesPlayed.length - 1], 'stop')
+    piano.values.notesPlayed = []
   }
 }
 
-const handleKeys = event => {
-  if(piano.values.allowedKeys.includes(event.key) && !piano.values.isKeyPressed) {
-    const keyPressed = document.querySelector(`[data-key="${event.keyCode}"]`) 
-    piano.values.isKeyPressed = true
-    piano.actions.interval = setInterval(activeNote(keyPressed), 100)
+const handleClickRelease = () => {
+  if(piano.values.notesPlayed.length) {
+    processInputNote(piano.values.notesPlayed[piano.values.notesPlayed.length - 1], 'stop')
+    piano.values.notesPlayed = []
   }
 }
 
-const stopHandleKeys = event => {
+const handleTouchStart = event => {
+  if(document.elementFromPoint(event.touches[0].clientX, event.touches[0].clientY) !== piano.views.container) {
+    handleClickDown(event)
+  }
+}
+
+const handleTouchMoves = event => {
+  event.preventDefault()
+  const currentKey = document.elementFromPoint(event.touches[0].clientX, event.touches[0].clientY)
+  // if(currentKey !== piano.views.container)
+  handlePointerMoves(currentKey)
+}
+
+const handleTouchEnd = event => {
+  event.preventDefault()
+  handleClickRelease()
+}
+
+const handleMoveOut = event => {
+  if(!event.target.dataset.note && piano.values.notesPlayed.length) {
+    processInputNote(piano.values.notesPlayed[piano.values.notesPlayed.length - 1], 'stop')
+    piano.values.notesPlayed = []
+  }
+}
+
+const handleKeyDown = event => {
+  const keyPressed = document.querySelector(`[data-key="${event.keyCode}"]`) 
+
   if(piano.values.allowedKeys.includes(event.key)) {
-    const keyPressed = document.querySelector(`[data-key="${event.keyCode}"]`)
-    stopNote(keyPressed)
+    processInputNote(keyPressed, 'start')
+  }
+}
+
+const handleKeyUp = event => {
+  const keyPressed = document.querySelector(`[data-key="${event.keyCode}"]`)
+  
+  if(!piano.values.previousKeyCalled) {
+    return
+  }
+
+  if(piano.values.allowedKeys.includes(event.key) && piano.values.previousKeyCalled.dataset.note === keyPressed.dataset.note) {
+    processInputNote(keyPressed, 'stop')
   }
 }
 
 const adjustVolume = () => {
   const volume = (-piano.values.volumeRange + Number(piano.views.volumeControl.value))
-  if(volume === -piano.values.volumeRange) {
-    piano.values.synth.volume.value = -Infinity
-  } else {
-    piano.values.synth.volume.value = volume
-  }
+  
+  piano.values.synth.volume.value = volume === -piano.values.volumeRange
+    ? -Infinity
+    : volume
 }
 
-const displayKeys = () => {
-  piano.views.keys.forEach(key => key.classList.toggle('hide'))
-}
+const displayKeys = () => piano.views.keys.forEach(key => key.classList.toggle('hide'))
 
 piano.views.powerButton.addEventListener('click', async () => {
   if (piano.views.powerButton.hasAttribute('clicked')) {
     if (piano.values.synth) {
       piano.values.synth.dispose() 
-      piano.views.soundSelector.removeEventListener('input', switchSound)
-      piano.views.keyboard.removeEventListener('mousedown', handleClick)
-      piano.views.keyboard.removeEventListener('mouseup', stopHandleClick)
-      piano.views.keyboard.removeEventListener('touchstart', handleClick)
-      piano.views.keyboard.removeEventListener('touchend', stopHandleClick)
-      document.removeEventListener('keydown', handleKeys)
-      document.removeEventListener('keyup', stopHandleKeys)
-      piano.views.volumeControl.removeEventListener('input', adjustVolume)
-    }
 
+      piano.views.soundSelector.removeEventListener('input', switchSound)
+      piano.views.volumeControl.removeEventListener('input', adjustVolume)
+      
+      piano.views.keyboard.removeEventListener('mousedown', handleClickDown)
+      piano.views.keyboard.removeEventListener('mousemove', handlePointerMoves)
+      piano.views.keyboard.removeEventListener('mouseup', handleClickRelease)
+      
+      piano.views.keyboard.removeEventListener('touchstart', handleTouchStart)
+      piano.views.keyboard.removeEventListener('touchmove', handleTouchMoves)
+      piano.views.keyboard.removeEventListener('touchend', handleTouchEnd)
+
+      piano.views.container.removeEventListener('mouseover', handleMoveOut)
+
+      document.removeEventListener('keydown', handleKeyDown)
+      document.removeEventListener('keyup', handleKeyUp)
+    }
+    
     piano.views.powerButton.removeAttribute('clicked')
     
   } else {
-
-    piano.views.powerButton.setAttribute('clicked', '')
+    piano.views.powerButton.setAttribute('clicked', '') 
     
     if (await initializeAudio()) {
       setSound(piano.views.soundSelector.value)
+
       piano.views.soundSelector.addEventListener('input', switchSound)
-      piano.views.keyboard.addEventListener('mousedown', handleClick)
-      piano.views.keyboard.addEventListener('mouseup', stopHandleClick)
-      piano.views.keyboard.addEventListener('touchstart', handleClick)
-      piano.views.keyboard.addEventListener('touchend', stopHandleClick)
-      document.addEventListener('keydown', handleKeys)
-      document.addEventListener('keyup', stopHandleKeys)
       piano.views.volumeControl.addEventListener('input', adjustVolume)
+      
+      piano.views.keyboard.addEventListener('mousedown', handleClickDown)
+      piano.views.keyboard.addEventListener('mousemove', handlePointerMoves)
+      piano.views.keyboard.addEventListener('mouseup', handleClickRelease)
+      
+      piano.views.keyboard.addEventListener('touchstart', handleTouchStart)
+      piano.views.keyboard.addEventListener('touchmove', handleTouchMoves)
+      piano.views.keyboard.addEventListener('touchend', handleTouchEnd)
+
+      piano.views.container.addEventListener('mouseover', handleMoveOut)
+
+      document.addEventListener('keydown', handleKeyDown)
+      document.addEventListener('keyup', handleKeyUp)
     } 
   }
 })
 
+piano.views.container.addEventListener('contextmenu', event => event.preventDefault())
 piano.views.keysDisplayControl.addEventListener('click', displayKeys)
-
